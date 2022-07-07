@@ -1,3 +1,4 @@
+import os
 from ctypes import *
 import time
 
@@ -25,7 +26,12 @@ class FlipMountController:
             raise ValueError(f'This serial number {sn} seems not to be the one of flip mount.')
         self.sn = c_char_p(sn.encode())
 
-        self.lib = cdll.LoadLibrary(r'C:\Program Files\Thorlabs\Kinesis\Thorlabs.MotionControl.FilterFlipper.dll')
+        # pythonのバージョンによってはos.chdirが必要な場合がある．
+        try:  # Python3.10用
+            self.lib = cdll.LoadLibrary(r'C:\Program Files\Thorlabs\Kinesis\Thorlabs.MotionControl.FilterFlipper.dll')
+        except OSError:  # Python3.6用
+            os.chdir(r"C:\Program Files\Thorlabs\Kinesis")
+            self.lib = cdll.LoadLibrary("Thorlabs.MotionControl.FilterFlipper.dll")
         self.lib.TLI_BuildDeviceList()
         self.lib.FF_Open(self.sn)
         self.lib.FF_StartPolling(self.sn, c_int(200))
