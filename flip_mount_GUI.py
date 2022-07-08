@@ -213,7 +213,7 @@ class FMCWindow(tk.Frame):
 def main():
     root = tk.Tk()
     root.protocol('WM_DELETE_WINDOW', lambda: quit_me(root))
-    app = FMCWindow(master=root, sn_list=['37000000', '37858078', '37000000'])
+    app = FMCWindow(master=root, sn_list=['37005139', '37858078', '37005169'])
     app.mainloop()
 
 
